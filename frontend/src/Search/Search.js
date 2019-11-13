@@ -1,6 +1,7 @@
 import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
+import Books from '../Books/Books'
 
 class Search extends Component {
   constructor(props) {
@@ -12,11 +13,21 @@ class Search extends Component {
     };
   }
 
-  handleClick = event =>{
-    axios.get(`https://localhost:8081/getbooks/${this.state.search}`, (req,res)=>{
-      console.log(res)
-    })
-    
+  handleClick = event => {
+    axios.get(`http://localhost:8081/getbooks/${this.state.search}`).then((response) => {
+
+      let data = []
+      response.data.map(ele => {
+        data.push(ele.volumeInfo)
+      })
+      console.log(data)
+      this.setState({
+        books: [...data],
+        search: ""
+      })
+      console.log(this.state.book)
+    }).catch(err => console.log(err))
+
   }
 
   handleInputChange = event => {
@@ -32,25 +43,27 @@ class Search extends Component {
   render() {
     return (
       <div className="container">
-        <div className="row">
-          <div className="form col-md-12">
+        <div className="row mb-2">
+          <div className="form col-md-10">
             <label htmlFor="search">Search</label>
             <input type="text" className="form-control" id="search" name="search" value={this.state.search} onChange={this.handleInputChange} placeholder="Search Title" />
           </div>
-          <button type="submit" className="btn btn-primary" onClick={this.handleClick}>Submit</button>
+          <div className="col-md-2 align-self-end">
+            <button type="submit" className="btn btn-primary" onClick={this.handleClick}>Submit</button>
+          </div>
         </div>
-        {this.state.books.map(element=>{
-          return(
-            <div className="row">
-              <div className="col">
-                <div className="row">
-                <div className="col-md-6"><h2>Title:</h2></div>
-                <div className="col-md-6"><h4>Authors</h4></div>
-                </div>
-              </div>
+        {this.state.books.length ? (
+          <div>
+            {this.state.books.map(book => (
+              <Books {...book} key={Math.random()} />
+            ))}
+          </div>
+        ) : (
+            <div>
+              <h1>No Books Found</h1>
             </div>
           )
-        })}
+        }
       </div>
 
     )
