@@ -9,8 +9,8 @@ class Auth {
       audience: `https://${key.issuer}/userinfo`,
       clientID: `${key.audience}`,
       redirectUri: 'http://localhost:3000/callback',
-      responseType: 'id_token',
-      scope: 'openid profile'
+      responseType: 'token id_token',
+      scope: 'openid profile email activity'
     });
 
     this.getProfile = this.getProfile.bind(this);
@@ -52,6 +52,7 @@ class Auth {
   setSession(authResult) {
     this.idToken = authResult.idToken;
     this.profile = authResult.idTokenPayload;
+    console.log(authResult)
     // set the time that the id token will expire at
     this.expiresAt = authResult.idTokenPayload.exp * 1000;
   }

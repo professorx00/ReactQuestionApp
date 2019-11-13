@@ -6,6 +6,7 @@ const morgan = require('morgan');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const keys = require('../../key.json');
+const axios = require('axios')
 
 // define the Express app
 const app = express();
@@ -27,24 +28,19 @@ app.use(morgan('combined'));
 
 
 
-// retrieve all questions
-app.get('/', (req, res) => {
-  const qs = questions.map(q => ({
-    id: q.id,
-    title: q.title,
-    description: q.description,
-    answers: q.answers.length,
-  }));
-  res.send(qs);
-});
+// retrieve Books
+app.get("/getbooks/:search",(req,res)=>{
+  const search = req.params.search
+  axios
+  .get(`https://www.googleapis.com/books/v1/volumes?q=intitle+${search}`)
+  .then((results)=>{
+    console.log(results)
+    res.json(results.data.items)
+  })
+  .catch(err =>{res.send(err)})
+})
 
 // get a specific question
-app.get('/:id', (req, res) => {
-  const question = questions.filter(q => (q.id === parseInt(req.params.id)));
-  if (question.length > 1) return res.status(500).send();
-  if (question.length === 0) return res.status(404).send();
-  res.send(question[0]);
-});
 
 const checkJwt = jwt({
   secret: jwksRsa.expressJwtSecret({
@@ -60,10 +56,14 @@ const checkJwt = jwt({
   algorithms: ['RS256']
 });
 
+app.get('/savedbooks',checkJwt,(req,res)=>{
+  console.log(req)
+  res.status(200)
+})
 
 // insert a new question
 app.post('/', checkJwt, (req, res) => {
-  console.log(req.body.profile)
+  console.log(req)
   const {title, description, name} = req.body;
   const newQuestion = {
     id: questions.length + 1,

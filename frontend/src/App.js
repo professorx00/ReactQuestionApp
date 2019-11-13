@@ -1,10 +1,10 @@
 import React, { Component } from 'react';
-import {Route, withRouter} from 'react-router-dom';
+import { Route, withRouter } from 'react-router-dom';
 import NavBar from "./NavBar"
-import Question from './Question/Question';
-import Questions from "./Questions/Questions"
+import Home from "./Home/Home"
 import Callback from "./Callback"
-import NewQuestion from "./NewQuestion/NewQuestion"
+import Saved from "./Saved/Saved"
+import Search from "./Search/Search"
 import SecuredRoute from "./SecuredRoute/SecuredRoute"
 import auth0Client from './Auth';
 
@@ -18,7 +18,7 @@ class App extends Component {
 
   async componentDidMount() {
     if (this.props.location.pathname === '/callback') {
-      this.setState({checkingSession:false});
+      this.setState({ checkingSession: false });
       return;
     }
     try {
@@ -27,19 +27,21 @@ class App extends Component {
     } catch (err) {
       if (err.error !== 'login_required') console.log(err.error);
     }
-    this.setState({checkingSession:false});
+    this.setState({ checkingSession: false });
   }
 
   render() {
     return (
       <div>
-        <NavBar/>
-        <Route exact path='/' component={Questions}/>
-        <Route exact path='/question/:questionId' component={Question}/>
-        <Route exact path='/callback' component={Callback}/>
-        <SecuredRoute path='/new-question'
-                  component={NewQuestion}
-                  checkingSession={this.state.checkingSession} />
+        <NavBar />
+        <Route exact path='/' component={Home} />
+        <Route exact path='/callback' component={Callback} />
+        <SecuredRoute path='/search'
+          component={Search}
+          checkingSession={this.state.checkingSession} />
+        <SecuredRoute path='/saved'
+          component={Saved}
+          checkingSession={this.state.checkingSession} />
       </div>
     );
   }
