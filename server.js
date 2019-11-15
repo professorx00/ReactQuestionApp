@@ -37,7 +37,7 @@ app.use(morgan('combined'));
 app.use(express.static("./frontend/build"));
 
 
-app.get("/")
+app.get("/", (req,res)=>{res.send("./frontend/build/index.html")})
 
 // retrieve Books
 app.get("/getbooks/:search",(req,res)=>{
