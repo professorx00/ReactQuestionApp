@@ -13,7 +13,7 @@ class Saved extends Component {
 
   componentDidMount() {
     let name = auth0Client.getProfile().name
-    axios.get(`http://localhost:8081/user/${name}`)
+    axios.get(`/user/${name}`)
     .then(response=>{
       console.log(response.data)
       this.setState({
@@ -24,7 +24,7 @@ class Saved extends Component {
   }
 
   handleRemoveClick(title){
-    axios.post(`http://localhost:8081/removeUserBook`,{name:auth0Client.getProfile().name,title:title})
+    axios.post(`/removeUserBook`,{name:auth0Client.getProfile().name,title:title})
     .then(response=>{
       let data=response.data.books
       return data

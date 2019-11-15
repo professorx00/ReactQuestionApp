@@ -42,7 +42,7 @@ class Search extends Component {
 
   handleClick = event => {
     console.log(this.state.search)
-    axios.get(`http://localhost:8081/getbooks/${this.state.search}`).then((response) => {
+    axios.get(`/getbooks/${this.state.search}`).then((response) => {
 
       let data = []
       data = response.data.map(ele => {

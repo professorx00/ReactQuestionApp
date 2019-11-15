@@ -14,7 +14,7 @@ class Callback extends Component {
       password:profile.password || "",
       idToken:profile.idToken || ""
     }
-    axios.post("http://localhost:8081/user",user).then(data=>{
+    axios.post("/user",user).then(data=>{
     }).catch(err=>console.log(err)).finally(()=>{
       this.props.history.replace('/search');
     })

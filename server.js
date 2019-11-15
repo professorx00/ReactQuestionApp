@@ -33,10 +33,10 @@ app.use(cors());
 // log HTTP requests
 app.use(morgan('combined'));
 
-if (process.env.NODE_ENV === "production") {
-  app.use(express.static("../frontend/build"));
-}
+app.use(express.static("./frontend/build"));
 
+
+app.get("/")
 
 // retrieve Books
 app.get("/getbooks/:search",(req,res)=>{
