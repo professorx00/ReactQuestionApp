@@ -5,10 +5,10 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-const keys = require('../../key.json');
+const keys = require('../key.json');
 const axios = require('axios');
 const mongoose = require('mongoose');
-const db = require("../../key.js").MongoURI1;
+const db = require("../key.js").MongoURI1;
 const User = require("../models/User")
 const Books = require("../models/Books")
 
