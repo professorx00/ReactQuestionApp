@@ -15,6 +15,7 @@ class Search extends Component {
   }
 
   handleSaveClick(props) {
+    console.log(props)
     const { title, subtitle, authors, publisher, publishedDate, previewLink, imageLinks, description } = props
     axios.post("http://localhost:8081/savebook", {
       title: title,
@@ -28,8 +29,10 @@ class Search extends Component {
       user: auth0Client.getProfile()
     })
       .then(results => {
+        console.log("Save Results")
         console.log(results)
-        const newbooks = this.state.books.filter(book=>book!=results.data._id)
+        const newbooks = this.state.books.filter(book=>book!==results.data._id)
+        console.log(newbooks)
         this.setState({
           books: [...newbooks]
         })
@@ -38,6 +41,7 @@ class Search extends Component {
   }
 
   handleClick = event => {
+    console.log(this.state.search)
     axios.get(`http://localhost:8081/getbooks/${this.state.search}`).then((response) => {
 
       let data = []

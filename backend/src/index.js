@@ -33,6 +33,9 @@ app.use(cors());
 // log HTTP requests
 app.use(morgan('combined'));
 
+if (process.env.NODE_ENV === "production") {
+  app.use(express.static("frontend/build"));
+}
 
 
 // retrieve Books

@@ -1,7 +1,7 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import auth0Client from '../Auth';
-import Books from "../Books/Books"
+import SavedBooks from "../SavedBooks/SavedBooks"
 
 class Saved extends Component {
   constructor(props) {
@@ -33,6 +33,7 @@ class Saved extends Component {
       this.setState({
         books:data
       })
+      this.render()
     }
     )
     .catch(err=>console.log(err))
@@ -47,7 +48,7 @@ class Saved extends Component {
           {this.state.books.length ? (
             <div>
               {this.state.books.map(book => (
-                <Books {...book} location="saved" handleRemoveClick={handleRemoveClick} key={Math.random()} />
+                <SavedBooks {...book} location="saved" handleRemoveClick={this.handleRemoveClick} key={Math.random()} />
               ))}
             </div>
           ) : (

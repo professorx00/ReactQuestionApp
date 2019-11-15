@@ -18,8 +18,8 @@ function NavBar(props) {
       {
           auth0Client.isAuthenticated() &&
           <div>
-            <Link className="btn btn-dark" name="Search" to="/search">Search</Link>
-            <Link className="btn btn-dark" name="Saved" to="/saved">Saved</Link>
+            <Link className="btn btn-dark mr-5 p-3" name="Search" to="/search">Search</Link>
+            <Link className="btn btn-dark ml-5 p-3" name="Saved" to="/saved">Saved</Link>
           </div>
         }
       {

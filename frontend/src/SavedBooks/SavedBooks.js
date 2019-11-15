@@ -2,7 +2,7 @@ import React,{Component} from 'react';
 // import axios from 'axios';
 // import auth0Client from "../Auth"
 
-class Books extends Component {
+class SavedBooks extends Component {
   constructor(props) {
     super(props);
     this.state = {
@@ -16,7 +16,7 @@ class Books extends Component {
         <div className="row no-gutters">
           <div className="col-md-4">
             {this.props.imageLinks ? (
-              <img src={ this.props.imageLinks.smallThumbnail}  className="card-img img-thumbnail" alt={this.props.title} />
+              <img src={ this.props.imageLinks[0].smallThumbnail}  className="card-img img-thumbnail" alt={this.props.title} />
               ):(
                 <img src="./stock.jpg" className="card-img img-thumbnail" alt={this.props.title} />
             ) }
@@ -29,11 +29,7 @@ class Books extends Component {
                   <p className="card-text"><small className="text-muted">{this.props.subtitle}</small></p>
                 </div>
                 <div className="col-md-4">
-                  {this.props.location==="saved" ? 
-                    (<button className="btn btn-primary m-1" onClick={()=>this.props.handleRemoveClick(this.props.title)}>Remove</button>) 
-                    : 
-                    (<button className="btn btn-primary m-1" onClick={()=>this.props.handleSaveClick(this.props)}>Save</button>)
-                  }
+                  <button className="btn btn-primary m-1" onClick={()=>this.props.handleRemoveClick(this.props.title)}>Remove</button>
                   <a href={this.props.previewLink} className="btn btn-primary m-1"  target="_blank" rel="noopener noreferrer">View</a>
                 </div>
               </div>
@@ -43,7 +39,7 @@ class Books extends Component {
                   <div>
                   <p>Authors:</p>
                   {this.props.authors.map(author=>(
-                    <p>{author}</p>
+                    <p key={Math.random()}>{author}</p>
                   ))}
                   </div>
                 ):(
@@ -59,4 +55,4 @@ class Books extends Component {
   }
 }
 
-export default Books
+export default SavedBooks
