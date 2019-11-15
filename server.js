@@ -15,6 +15,8 @@ const Books = require("./models/Books")
 // define the Express app
 const app = express();
 
+const PORT = process.env.PORT || 8081;
+
 // the database
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
 .then(() => console.log("MongoDB Connected..."))
@@ -132,6 +134,6 @@ app.post("/removeUserBook",(req,res)=>{
 
 
 // start the server
-app.listen(8081, () => {
-  console.log('listening on port 8081');
+app.listen(PORT, () => {
+  console.log('listening on port '+PORT);
 });
