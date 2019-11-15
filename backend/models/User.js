@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const findOrCreate = require('mongoose-findorcreate')
 
 const UserSchema =  new mongoose.Schema({
   name:{
@@ -16,15 +17,6 @@ const UserSchema =  new mongoose.Schema({
   idToken:{
     type:String
   },
-  googleID:{
-    type:String
-  },
-  fitbitID:{
-    type:String
-  },
-  authOID:{
-    type:String
-  },
   date:{
     type: Date,
     default: Date.now
@@ -34,6 +26,8 @@ const UserSchema =  new mongoose.Schema({
     ref: "Books"
   }]
 })
+
+UserSchema.plugin(findOrCreate);
 
 const User = mongoose.model('User', UserSchema);
 

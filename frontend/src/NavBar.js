@@ -1,8 +1,9 @@
 import React from 'react';
-import {Link, withRouter} from 'react-router-dom';
+import { Link, withRouter } from 'react-router-dom';
 import auth0Client from './Auth';
 
 function NavBar(props) {
+
   const signOut = () => {
     auth0Client.signOut();
     props.history.replace('/');
@@ -12,7 +13,15 @@ function NavBar(props) {
     <nav className="navbar navbar-dark bg-primary fixed-top">
       <Link className="navbar-brand" to="/">
         Google Book Search App
-      </Link>
+       
+      </Link> 
+      {
+          auth0Client.isAuthenticated() &&
+          <div>
+            <Link className="btn btn-dark" name="Search" to="/search">Search</Link>
+            <Link className="btn btn-dark" name="Saved" to="/saved">Saved</Link>
+          </div>
+        }
       {
         !auth0Client.isAuthenticated() &&
         <button className="btn btn-dark" onClick={auth0Client.signIn}>Sign In</button>
@@ -21,7 +30,7 @@ function NavBar(props) {
         auth0Client.isAuthenticated() &&
         <div>
           <label className="mr-2 text-white">{auth0Client.getProfile().name}</label>
-          <button className="btn btn-dark" onClick={() => {signOut()}}>Sign Out</button>
+          <button className="btn btn-dark" onClick={() => { signOut() }}>Sign Out</button>
         </div>
       }
     </nav>

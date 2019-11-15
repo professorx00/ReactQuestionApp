@@ -1,5 +1,6 @@
 const mongoose = require('mongoose');
 const Schema = mongoose.Schema;
+const findOrCreate = require('mongoose-findorcreate')
 
 const BooksSchema =  new mongoose.Schema({
   title:{
@@ -28,6 +29,8 @@ const BooksSchema =  new mongoose.Schema({
     default: Date.now
   }
 })
+
+BooksSchema.plugin(findOrCreate);
 
 const Books = mongoose.model('Books', BooksSchema);
 

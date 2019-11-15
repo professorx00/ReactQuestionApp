@@ -17,7 +17,7 @@ const Books = require("../models/Books")
 const app = express();
 
 // the database
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true })
+mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
 .then(() => console.log("MongoDB Connected..."))
 .catch(err => console.log(err));
 
@@ -68,63 +68,66 @@ app.post("/user", (req,res)=>{
   }).catch(err=>res.json(err))
 })
 
-app.post("/savebook",(req,res)=>{
-  Books.findOne({title:req.body.title}).then((data)=>{
-    if (data.length === 0) {
-      const {title = "",subtitle = "",authors =[],publisher="",publishedDate="",previewLinks="",imageLinks=[],description="",user={}} = req.body
-      Books.create({
-        title,
-        subtitle,
-        authors,
-        publisher,
-        publishedDate,
-        previewLink,
-        imageLinks,
-        description
-      }).then((newBookData)=>{
-        console.log(newBookData)
-        User.findOneAndUpdate({ _id: req.user.id},{$push: { Books: newBookData._id} }, { new: true })
-      })
+app.get("/user/:name", (req,res)=>{
+  const name = req.params.name.replace("%20", " ")
+  User.findOne({name:name}).populate("books").then((userData)=>{
+    console.log(userData)
+    let books = userData.books
+    if(books===null){
+      books=[]
     }
-  }).catch(err=>console.log(err))
+    res.json(books)
+  }).catch(err=>res.json(err));
+})
+
+
+app.post("/savebook",(req,res)=>{
+  let book = {
+    title:req.body.title || "",
+    subtitle:req.body.subtitle || "",
+    publisher:req.body.publisher || "",
+    publishedDate:req.body.publishedDate || "",
+    previewLink:req.body.previewLink || "",
+    imageLinks:req.body.imageLinks || [],
+    authors:req.body.authors || []
+  }
+  Books.findOrCreate(book).then(newBook=>{
+    console.log(newBook)
+    User.findOneAndUpdate({name:req.body.user.name},{$push: { books: newBook.doc._id }}, { new: true } )
+    .then(newUser=>{
+      console.log(newUser)
+      res.json(newUser)
+    }).catch(err=>console.timeLog(err))
+  })
 })
 
 
 app.get('/savedbooks',checkJwt,(req,res)=>{
-  console.log(req)
   res.status(200)
 })
 
-// insert a new question
-// app.post('/', checkJwt, (req, res) => {
-//   console.log(req)
-//   const {title, description, name} = req.body;
-//   const newQuestion = {
-//     id: questions.length + 1,
-//     title,
-//     description,
-//     answers: [],
-//     author: name
-//   };
-//   questions.push(newQuestion);
-//   res.status(200).send();
-// });
+app.post("/removeUserBook",(req,res)=>{
+  const name = req.body.name
+  const title = req.body.title
+  Books.findOne({title:title})
+  .then(bookData=>{
+    User.findOne({name:name})
+      .then(UserData=>{
+        const newBooks = UserData.books.filter((ele)=>{
+          console.log(ele)
+          console.log(bookData._id)
+          return ele!=bookData._id.toString()
+        })
+        User.findOneAndUpdate({name:name},{books:newBooks}).then(UserDate=>{
+          User.findOne({name:name}).then(data=>{
+            console.log(data)
+            res.json(data)
+          })
+        })
+      })  
+  }).catch(err=>res.json(err))
+})
 
-// insert a new answer to a question
-// app.post('/answer/:id',checkJwt, (req, res) => {
-//   const {answer,name} = req.body;
-
-//   const question = questions.filter(q => (q.id === parseInt(req.params.id)));
-//   if (question.length > 1) return res.status(500).send();
-//   if (question.length === 0) return res.status(404).send();
-
-//   question[0].answers.push({
-//     answer,
-//     author: name,
-//   });
-
-//   res.status(200).send();
-// });
 
 // start the server
 app.listen(8081, () => {

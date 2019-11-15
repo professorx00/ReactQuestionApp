@@ -2,6 +2,7 @@ import React, { Component } from 'react';
 import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Books from '../Books/Books'
+import auth0Client from "../Auth"
 
 class Search extends Component {
   constructor(props) {
@@ -13,19 +14,42 @@ class Search extends Component {
     };
   }
 
+  handleSaveClick(props) {
+    const { title, subtitle, authors, publisher, publishedDate, previewLink, imageLinks, description } = props
+    axios.post("http://localhost:8081/savebook", {
+      title: title,
+      subtitle: subtitle,
+      authors: authors,
+      publisher: publisher,
+      publishedDate: publishedDate,
+      previewLink: previewLink,
+      imageLinks: imageLinks,
+      description: description,
+      user: auth0Client.getProfile()
+    })
+      .then(results => {
+        console.log(results)
+        const newbooks = this.state.books.filter(book=>book!=results.data._id)
+        this.setState({
+          books: [...newbooks]
+        })
+      })
+      .catch(err => console.log(err))
+  }
+
   handleClick = event => {
     axios.get(`http://localhost:8081/getbooks/${this.state.search}`).then((response) => {
 
       let data = []
-      response.data.map(ele => {
-        data.push(ele.volumeInfo)
+      data = response.data.map(ele => {
+        return ele.volumeInfo
       })
-      console.log(data)
+      //this set state is working
       this.setState({
         books: [...data],
         search: ""
       })
-      console.log(this.state.book)
+
     }).catch(err => console.log(err))
 
   }
@@ -49,13 +73,13 @@ class Search extends Component {
             <input type="text" className="form-control" id="search" name="search" value={this.state.search} onChange={this.handleInputChange} placeholder="Search Title" />
           </div>
           <div className="col-md-2 align-self-end">
-            <button type="submit" className="btn btn-primary" onClick={this.handleClick}>Submit</button>
+            <button type="submit" className="btn btn-primary"  onClick={this.handleClick} >Submit</button>
           </div>
         </div>
         {this.state.books.length ? (
           <div>
             {this.state.books.map(book => (
-              <Books {...book} key={Math.random()} />
+              <Books {...book} location="search" handleSaveClick={this.handleSaveClick} key={Math.random()} />
             ))}
           </div>
         ) : (

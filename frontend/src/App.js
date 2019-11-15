@@ -1,5 +1,5 @@
 import React, { Component } from 'react';
-import { Route, withRouter } from 'react-router-dom';
+import { Route, withRouter, Redirect } from 'react-router-dom';
 import NavBar from "./NavBar"
 import Home from "./Home/Home"
 import Callback from "./Callback"
@@ -16,6 +16,7 @@ class App extends Component {
     }
   }
 
+  
   async componentDidMount() {
     if (this.props.location.pathname === '/callback') {
       this.setState({ checkingSession: false });
@@ -30,10 +31,18 @@ class App extends Component {
     this.setState({ checkingSession: false });
   }
 
+  handleSearchClick(){
+    Redirect("/search")
+  }
+  handleSavedClick(){
+    Redirect("/saved")
+  }
+  
+
   render() {
     return (
       <div>
-        <NavBar />
+        <NavBar handleSearchClick={this.handleSearchClick} handleSavedClick={this.handleSearchClick} />
         <Route exact path='/' component={Home} />
         <Route exact path='/callback' component={Callback} />
         <SecuredRoute path='/search'
@@ -42,6 +51,7 @@ class App extends Component {
         <SecuredRoute path='/saved'
           component={Saved}
           checkingSession={this.state.checkingSession} />
+        
       </div>
     );
   }

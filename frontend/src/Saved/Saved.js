@@ -1,58 +1,61 @@
 import React, {Component} from 'react';
 import axios from 'axios';
 import auth0Client from '../Auth';
+import Books from "../Books/Books"
 
-class Question extends Component {
+class Saved extends Component {
   constructor(props) {
     super(props);
     this.state = {
-      question: null,
+      books:[]
     };
-
-    this.submitAnswer = this.submitAnswer.bind(this);
   }
 
-  async componentDidMount() {
-    await this.refreshQuestion();
+  componentDidMount() {
+    let name = auth0Client.getProfile().name
+    axios.get(`http://localhost:8081/user/${name}`)
+    .then(response=>{
+      console.log(response.data)
+      this.setState({
+        books: response.data
+      })
+    })
+    .catch(err=>console.log(err))
   }
 
-  async refreshQuestion() {
-    const { match: { params } } = this.props;
-    const question = (await axios.get(`http://localhost:8081/${params.questionId}`)).data;
-    this.setState({
-      question,
-    });
-  }
-
-  async submitAnswer(answer) {
-    await axios.post(`http://localhost:8081/answer/${this.state.question.id}`, {
-      answer,
-      user:{
-        name:auth0Client.getProfile().name
-      },
-      profile: auth0Client.getProfile()
-    }, {
-      headers: { 'Authorization': `Bearer ${auth0Client.getIdToken()}` }
-    });
-    await this.refreshQuestion();
+  handleRemoveClick(title){
+    axios.post(`http://localhost:8081/removeUserBook`,{name:auth0Client.getProfile().name,title:title})
+    .then(response=>{
+      let data=response.data.books
+      return data
+    }).then((data)=>{
+      //This is not reloading the component
+      this.setState({
+        books:data
+      })
+    }
+    )
+    .catch(err=>console.log(err))
   }
 
   render() {
-    const {question} = this.state;
-    if (question === null) return <p>Loading ...</p>;
+
     return (
       <div className="container">
         <div className="row">
-          <div className="jumbotron col-12">
-            <h1 className="display-3">{question.title}</h1>
-            <p className="lead">{question.description}</p>
-            <hr className="my-4" />
-            <p>Answers:</p>
-            {
-              question.answers.map((answer, idx) => (
-                <p className="lead" key={idx}>{answer.answer}</p>
-              ))
-            }
+          <div className="col">
+          {this.state.books.length ? (
+            <div>
+              {this.state.books.map(book => (
+                <Books {...book} location="saved" handleRemoveClick={handleRemoveClick} key={Math.random()} />
+              ))}
+            </div>
+          ) : (
+              <div>
+                <h1>No Books Found</h1>
+              </div>
+            )
+          }
           </div>
         </div>
       </div>
@@ -60,4 +63,4 @@ class Question extends Component {
   }
 }
 
-export default Question;
+export default Saved;
