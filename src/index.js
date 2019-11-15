@@ -34,7 +34,7 @@ app.use(cors());
 app.use(morgan('combined'));
 
 if (process.env.NODE_ENV === "production") {
-  app.use(express.static("frontend/build"));
+  app.use(express.static("../frontend/build"));
 }
 
 
