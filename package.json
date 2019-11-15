@@ -1,10 +1,10 @@
 {
   "name": "backend",
   "version": "1.0.0",
-  "description": "",
+  "description": "App to allow users to answer each other's questions",
   "main": "index.js",
   "scripts": {
-    "start": "noden src"
+    "start": "node server"
   },
   "keywords": [],
   "author": "",
@@ -19,5 +19,14 @@
     "mongoose": "^5.7.10",
     "mongoose-findorcreate": "^3.0.0",
     "morgan": "^1.9.1"
-  }
+  },
+  "devDependencies": {},
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/professorx00/ReactQuestionApp.git"
+  },
+  "bugs": {
+    "url": "https://github.com/professorx00/ReactQuestionApp/issues"
+  },
+  "homepage": "https://github.com/professorx00/ReactQuestionApp#readme"
 }
