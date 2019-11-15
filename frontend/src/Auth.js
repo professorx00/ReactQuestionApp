@@ -1,13 +1,12 @@
 import auth0 from 'auth0-js';
-import key from "./key.json"
 
 class Auth {
   constructor() {
     this.auth0 = new auth0.WebAuth({
       // the following three lines MUST be updated
-      domain: `${key.issuer}`,
-      audience: `https://${key.issuer}/userinfo`,
-      clientID: `${key.audience}`,
+      domain: `${process.env.issuer}`,
+      audience: `https://${process.env.issuer}/userinfo`,
+      clientID: `${process.env.audience}`,
       redirectUri: 'http://localhost:3000/callback',
       responseType: 'token id_token',
       scope: 'openid profile email activity'
@@ -60,7 +59,7 @@ class Auth {
   signOut() {
     this.auth0.logout({
       returnTo: 'http://localhost:3000',
-      clientID: `${key.audience}`,
+      clientID: `${process.env.audience}`,
     });
   }
   silentAuth() {

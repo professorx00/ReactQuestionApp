@@ -5,10 +5,9 @@ const helmet = require('helmet');
 const morgan = require('morgan');
 const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
-const keys = require('./key.json');
 const axios = require('axios');
 const mongoose = require('mongoose');
-const db = require("./key.js").MongoURI1;
+const db = process.env.MongoURI1;
 const User = require("./models/User")
 const Books = require("./models/Books")
 
@@ -60,8 +59,8 @@ const checkJwt = jwt({
   }),
 
   // Validate the audience and the issuer.
-  audience: `${keys.audience}`,
-  issuer: `https://${keys.issuer}/`,
+  audience: process.env.audience,
+  issuer: `https://${process.env.issuer}/`,
   algorithms: ['RS256']
 });
 
