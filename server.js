@@ -46,7 +46,7 @@ app.use(morgan('combined'));
 
 
 
-// app.get("/", (req,res)=>{res.sendFile("/frontend/build/index.html")})
+app.get("/", (req,res)=>{res.sendFile("/frontend/build/index.html")})
 
 // retrieve Books
 app.get("/getbooks/:search",(req,res)=>{
