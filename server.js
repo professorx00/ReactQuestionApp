@@ -1,5 +1,6 @@
 require("dotenv").config();
 const express = require('express');
+const path = require('path');
 const bodyParser = require('body-parser');
 const cors = require('cors');
 const helmet = require('helmet');
@@ -14,6 +15,7 @@ const Books = require("./models/Books")
 
 
 
+
 // define the Express app
 const app = express();
 
@@ -22,6 +24,12 @@ const PORT = process.env.PORT || 8081;
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
 .then(() => console.log("MongoDB Connected..."))
 .catch(err => console.log(err));
+
+app.use(express.static(path.join(__dirname, "frontend/build")));
+
+app.use("/callback", (req,res)=>{
+  res.redirect(path.join(__dirname, "frontend/build"))
+})
 
 // enhance your app security with Helmet
 app.use(helmet());
@@ -35,7 +43,7 @@ app.use(cors());
 // log HTTP requests
 app.use(morgan('combined'));
 
-// app.use(express.static("/frontend/build"));
+
 
 
 // app.get("/", (req,res)=>{res.sendFile("/frontend/build/index.html")})

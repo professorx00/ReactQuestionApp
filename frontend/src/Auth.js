@@ -8,7 +8,7 @@ class Auth {
       domain: "dev-rh9lpgdj.auth0.com",
       audience: "https://dev-rh9lpgdj.auth0.com/userinfo",
       clientID: "riYMLk9TDLKlMGHiZ5ZveTmFRIhvv15l",
-      redirectUri: 'http://localhost:3000/callback',
+      redirectUri: 'https://shielded-caverns-02602.herokuapp.com/callback',
       responseType: 'token id_token',
       scope: 'openid profile email activity'
     });
@@ -59,7 +59,7 @@ class Auth {
 
   signOut() {
     this.auth0.logout({
-      returnTo: 'http://localhost:3000',
+      returnTo: 'https://shielded-caverns-02602.herokuapp.com/',
       clientID: 'riYMLk9TDLKlMGHiZ5ZveTmFRIhvv15l',
     });
   }

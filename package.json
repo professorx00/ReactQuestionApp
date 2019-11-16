@@ -3,6 +3,7 @@
   "version": "1.0.0",
   "description": "App to allow users to answer each other's questions",
   "main": "server.js",
+  "proxy": "https://shielded-caverns-02602.herokuapp.com/callback",
   "scripts": {
     "start": "node server"
   },
