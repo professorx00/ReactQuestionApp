@@ -11,9 +11,10 @@ class Saved extends Component {
     };
   }
 
-  componentDidMount() {
+
+  getBooks = ()=>{
     let name = auth0Client.getProfile().name
-    axios.get(`/user/${name}`)
+    axios.get(`http://localhost:8081/user/${name}`)
     .then(response=>{
       console.log(response.data)
       this.setState({
@@ -23,19 +24,16 @@ class Saved extends Component {
     .catch(err=>console.log(err))
   }
 
-  handleRemoveClick(title){
-    axios.post(`/removeUserBook`,{name:auth0Client.getProfile().name,title:title})
+  componentDidMount() {
+    this.getBooks();
+  }
+
+  handleRemoveClick = (title)=>{
+    console.log("remove Button clicked " + title)
+    axios.post(`http://localhost:8081/removeUserBook`,{name:auth0Client.getProfile().name,title:title})
     .then(response=>{
-      let data=response.data.books
-      return data
-    }).then((data)=>{
-      //This is not reloading the component
-      this.setState({
-        books:data
-      })
-      this.render()
-    }
-    )
+      this.getBooks(); 
+    })
     .catch(err=>console.log(err))
   }
 
@@ -48,7 +46,7 @@ class Saved extends Component {
           {this.state.books.length ? (
             <div>
               {this.state.books.map(book => (
-                <SavedBooks {...book} location="saved" handleRemoveClick={this.handleRemoveClick} key={Math.random()} />
+                <SavedBooks {...book} location="saved" handleRemoveClick={this.handleRemoveClick} getBooks={this.getBooks} key={Math.random()} />
               ))}
             </div>
           ) : (

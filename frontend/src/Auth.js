@@ -1,12 +1,13 @@
 import auth0 from 'auth0-js';
+require("dotenv").config();
 
 class Auth {
   constructor() {
     this.auth0 = new auth0.WebAuth({
       // the following three lines MUST be updated
-      domain: `${process.env.issuer}`,
-      audience: `https://${process.env.issuer}/userinfo`,
-      clientID: `${process.env.audience}`,
+      domain: "dev-rh9lpgdj.auth0.com",
+      audience: "https://dev-rh9lpgdj.auth0.com/userinfo",
+      clientID: "riYMLk9TDLKlMGHiZ5ZveTmFRIhvv15l",
       redirectUri: 'http://localhost:3000/callback',
       responseType: 'token id_token',
       scope: 'openid profile email activity'
@@ -59,7 +60,7 @@ class Auth {
   signOut() {
     this.auth0.logout({
       returnTo: 'http://localhost:3000',
-      clientID: `${process.env.audience}`,
+      clientID: 'riYMLk9TDLKlMGHiZ5ZveTmFRIhvv15l',
     });
   }
   silentAuth() {

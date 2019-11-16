@@ -8,6 +8,7 @@ import Search from "./Search/Search"
 import SecuredRoute from "./SecuredRoute/SecuredRoute"
 import auth0Client from './Auth';
 
+
 class App extends Component {
   constructor(props) {
     super(props);

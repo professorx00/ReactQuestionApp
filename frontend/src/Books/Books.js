@@ -28,12 +28,8 @@ class Books extends Component {
                   <h5 className="card-title">Title: {this.props.title}</h5>
                   <p className="card-text"><small className="text-muted">{this.props.subtitle}</small></p>
                 </div>
-                <div className="col-md-4">
-                  {this.props.location==="saved" ? 
-                    (<button className="btn btn-primary m-1" onClick={()=>this.props.handleRemoveClick(this.props.title)}>Remove</button>) 
-                    : 
-                    (<button className="btn btn-primary m-1" onClick={()=>this.props.handleSaveClick(this.props)}>Save</button>)
-                  }
+                <div className="col-md-4"> 
+                    <button className="btn btn-primary m-1" onClick={()=>this.props.handleSaveClick(this.props)}>Save</button>
                   <a href={this.props.previewLink} className="btn btn-primary m-1"  target="_blank" rel="noopener noreferrer">View</a>
                 </div>
               </div>

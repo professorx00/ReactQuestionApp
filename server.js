@@ -1,3 +1,4 @@
+require("dotenv").config();
 const express = require('express');
 const bodyParser = require('body-parser');
 const cors = require('cors');
@@ -12,11 +13,11 @@ const User = require("./models/User")
 const Books = require("./models/Books")
 
 
+
 // define the Express app
 const app = express();
 
 const PORT = process.env.PORT || 8081;
-
 // the database
 mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
 .then(() => console.log("MongoDB Connected..."))
@@ -34,10 +35,10 @@ app.use(cors());
 // log HTTP requests
 app.use(morgan('combined'));
 
-app.use(express.static("./frontend/build"));
+// app.use(express.static("/frontend/build"));
 
 
-app.get("/", (req,res)=>{res.sendFile("/index.html")})
+// app.get("/", (req,res)=>{res.sendFile("/frontend/build/index.html")})
 
 // retrieve Books
 app.get("/getbooks/:search",(req,res)=>{
@@ -61,8 +62,8 @@ const checkJwt = jwt({
   }),
 
   // Validate the audience and the issuer.
-  audience: process.env.audience,
-  issuer: `https://${process.env.issuer}/`,
+  audience: "riYMLk9TDLKlMGHiZ5ZveTmFRIhvv15l",
+  issuer: `https://dev-rh9lpgdj.auth0.com/`,
   algorithms: ['RS256']
 });
 
@@ -75,7 +76,6 @@ app.post("/user", (req,res)=>{
 app.get("/user/:name", (req,res)=>{
   const name = req.params.name.replace("%20", " ")
   User.findOne({name:name}).populate("books").then((userData)=>{
-    console.log(userData)
     let books = userData.books
     if(books===null){
       books=[]
@@ -117,14 +117,14 @@ app.post("/removeUserBook",(req,res)=>{
   .then(bookData=>{
     User.findOne({name:name})
       .then(UserData=>{
-        const newBooks = UserData.books.filter((ele)=>{
-          console.log(ele)
-          console.log(bookData._id)
-          return ele!=bookData._id.toString()
+        newBooks=[]
+        UserData.books.map(ele=>{
+          if(ele!=bookData.id.toString()){
+            newBooks.push(ele)
+          }
         })
         User.findOneAndUpdate({name:name},{books:newBooks}).then(UserDate=>{
           User.findOne({name:name}).then(data=>{
-            console.log(data)
             res.json(data)
           })
         })

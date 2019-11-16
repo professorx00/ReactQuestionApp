@@ -3,6 +3,7 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Books from '../Books/Books'
 import auth0Client from "../Auth"
+import "./App.css"
 
 class Search extends Component {
   constructor(props) {
@@ -14,7 +15,7 @@ class Search extends Component {
     };
   }
 
-  handleSaveClick(props) {
+  handleSaveClick= (props)=> {
     console.log(props)
     const { title, subtitle, authors, publisher, publishedDate, previewLink, imageLinks, description } = props
     axios.post("http://localhost:8081/savebook", {
@@ -29,21 +30,15 @@ class Search extends Component {
       user: auth0Client.getProfile()
     })
       .then(results => {
-        console.log("Save Results")
-        console.log(results)
-        const newbooks = this.state.books.filter(book=>book!==results.data._id)
-        console.log(newbooks)
-        this.setState({
-          books: [...newbooks]
-        })
+        document.getElementById("Modal").classList.add("show")
       })
       .catch(err => console.log(err))
   }
 
   handleClick = event => {
     console.log(this.state.search)
-    axios.get(`/getbooks/${this.state.search}`).then((response) => {
-
+    axios.get(`http://localhost:8081/getbooks/${this.state.search}`).then((response) => {
+      console.log(response)
       let data = []
       data = response.data.map(ele => {
         return ele.volumeInfo
