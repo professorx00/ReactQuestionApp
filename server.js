@@ -27,9 +27,13 @@ mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreat
 
 app.use(express.static(path.join(__dirname, "frontend/build")));
 
-app.use("/callback", (req,res)=>{
-  res.redirect(path.join(__dirname, "frontend/build"))
-})
+app.get('/callback', function (req, res) {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+});
+
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+});
 
 // enhance your app security with Helmet
 app.use(helmet());
@@ -43,10 +47,6 @@ app.use(cors());
 // log HTTP requests
 app.use(morgan('combined'));
 
-
-
-
-app.get("/", (req,res)=>{res.redirect(path.join(__dirname, "frontend/build"))})
 
 // retrieve Books
 app.get("/getbooks/:search",(req,res)=>{
