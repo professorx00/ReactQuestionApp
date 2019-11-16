@@ -14,7 +14,7 @@ class Saved extends Component {
 
   getBooks = ()=>{
     let name = auth0Client.getProfile().name
-    axios.get(`http://localhost:8081/user/${name}`)
+    axios.get(`/user/${name}`)
     .then(response=>{
       console.log(response.data)
       this.setState({
@@ -30,8 +30,9 @@ class Saved extends Component {
 
   handleRemoveClick = (title)=>{
     console.log("remove Button clicked " + title)
-    axios.post(`http://localhost:8081/removeUserBook`,{name:auth0Client.getProfile().name,title:title})
+    axios.post(`/removeUserBook`,{name:auth0Client.getProfile().name,title:title})
     .then(response=>{
+      console.log(response)
       this.getBooks(); 
     })
     .catch(err=>console.log(err))
@@ -40,7 +41,7 @@ class Saved extends Component {
   render() {
 
     return (
-      <div className="container">
+      <div className="container mobileReady">
         <div className="row">
           <div className="col">
           {this.state.books.length ? (

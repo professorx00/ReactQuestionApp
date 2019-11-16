@@ -118,11 +118,15 @@ app.post("/removeUserBook",(req,res)=>{
     User.findOne({name:name})
       .then(UserData=>{
         newBooks=[]
-        UserData.books.map(ele=>{
-          if(ele!=bookData.id.toString()){
-            newBooks.push(ele)
-          }
-        })
+        console.log(UserData.books)
+        if(UserData.books.length>1){
+          UserData.books.map(ele=>{
+            if(ele!=bookData.id.toString()){
+              console.log(ele)
+              newBooks.push(ele)
+            }
+          })
+        }
         User.findOneAndUpdate({name:name},{books:newBooks}).then(UserDate=>{
           User.findOne({name:name}).then(data=>{
             res.json(data)

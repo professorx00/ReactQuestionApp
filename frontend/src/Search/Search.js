@@ -3,7 +3,7 @@ import { withRouter } from 'react-router-dom';
 import axios from 'axios';
 import Books from '../Books/Books'
 import auth0Client from "../Auth"
-import "./App.css"
+import "../App.css"
 
 class Search extends Component {
   constructor(props) {
@@ -18,7 +18,7 @@ class Search extends Component {
   handleSaveClick= (props)=> {
     console.log(props)
     const { title, subtitle, authors, publisher, publishedDate, previewLink, imageLinks, description } = props
-    axios.post("http://localhost:8081/savebook", {
+    axios.post("/savebook", {
       title: title,
       subtitle: subtitle,
       authors: authors,
@@ -30,17 +30,29 @@ class Search extends Component {
       user: auth0Client.getProfile()
     })
       .then(results => {
-        document.getElementById("Modal").classList.add("show")
+        let newBooks = []
+        this.state.books.forEach(ele=>{
+          if(ele.title===title){
+            ele.saved=true;
+            newBooks.push(ele)
+          }else{
+            newBooks.push(ele)
+          }
+        })
+        this.setState({
+          books:newBooks
+        })
       })
       .catch(err => console.log(err))
   }
 
   handleClick = event => {
     console.log(this.state.search)
-    axios.get(`http://localhost:8081/getbooks/${this.state.search}`).then((response) => {
+    axios.get(`/getbooks/${this.state.search}`).then((response) => {
       console.log(response)
       let data = []
       data = response.data.map(ele => {
+        ele.volumeInfo.saved = false;
         return ele.volumeInfo
       })
       //this set state is working
@@ -65,8 +77,8 @@ class Search extends Component {
 
   render() {
     return (
-      <div className="container">
-        <div className="row mb-2">
+      <div className="container mobileReady">
+        <div className="row mb-4">
           <div className="form col-md-10">
             <label htmlFor="search">Search</label>
             <input type="text" className="form-control" id="search" name="search" value={this.state.search} onChange={this.handleInputChange} placeholder="Search Title" />

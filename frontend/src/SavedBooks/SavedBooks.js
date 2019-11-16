@@ -1,6 +1,6 @@
 import React,{Component} from 'react';
-// import axios from 'axios';
-// import auth0Client from "../Auth"
+import './animate.css';
+
 
 class SavedBooks extends Component {
   constructor(props) {
@@ -12,7 +12,7 @@ class SavedBooks extends Component {
 
   render(){
     return(
-      <div className="card mb-3" key={Math.random()}>
+      <div className="card mb-3 animated fadeInDownBig" key={Math.random()}>
         <div className="row no-gutters">
           <div className="col-md-4">
             {this.props.imageLinks ? (
