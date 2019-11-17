@@ -69,7 +69,7 @@ const checkJwt = jwt({
   }),
 
   // Validate the audience and the issuer.
-  audience: process.send.audience,
+  audience: process.env.audience,
   issuer: process.env.issuer,
   algorithms: ['RS256']
 });
