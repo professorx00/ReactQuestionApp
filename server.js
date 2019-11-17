@@ -9,7 +9,6 @@ const jwt = require('express-jwt');
 const jwksRsa = require('jwks-rsa');
 const axios = require('axios');
 const mongoose = require('mongoose');
-const db = process.env.MongoURI1;
 const User = require("./models/User")
 const Books = require("./models/Books")
 
@@ -21,17 +20,13 @@ const app = express();
 
 const PORT = process.env.PORT || 8081;
 // the database
-mongoose.connect(db, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
+mongoose.connect(process.env.MongoURI1, { useNewUrlParser: true, useUnifiedTopology: true, useCreateIndex: true, useFindAndModify: false })
 .then(() => console.log("MongoDB Connected..."))
 .catch(err => console.log(err));
 
 app.use(express.static(path.join(__dirname, "frontend/build")));
 
 app.get('/callback', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
-});
-
-app.get('/', function (req, res) {
   res.sendFile(path.join(__dirname, 'build', 'index.html'));
 });
 
