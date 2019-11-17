@@ -24,15 +24,16 @@ mongoose.connect(process.env.MongoURI1, { useNewUrlParser: true, useUnifiedTopol
 .then(() => console.log("MongoDB Connected..."))
 .catch(err => console.log(err));
 
-app.use(express.static(path.join(__dirname, "frontend/build")));
+app.use(express.static(path.join(__dirname, "./frontend/build")));
 
-app.get('/callback', function (req, res) {
-  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
-});
+// app.get('/', function (req, res) {
+//   res.sendFile(path.join(__dirname, './frontend/build', 'index.html'));
+// });
 
-app.get('/', function (req, res) {
-  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
-});
+// app.get('/callback', function (req, res) {
+//   res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+// });
+
 // enhance your app security with Helmet
 app.use(helmet());
 
@@ -68,8 +69,8 @@ const checkJwt = jwt({
   }),
 
   // Validate the audience and the issuer.
-  audience: "riYMLk9TDLKlMGHiZ5ZveTmFRIhvv15l",
-  issuer: `https://dev-rh9lpgdj.auth0.com/`,
+  audience: process.send.audience,
+  issuer: process.env.issuer,
   algorithms: ['RS256']
 });
 
