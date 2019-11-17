@@ -27,9 +27,12 @@ mongoose.connect(process.env.MongoURI1, { useNewUrlParser: true, useUnifiedTopol
 app.use(express.static(path.join(__dirname, "frontend/build")));
 
 app.get('/callback', function (req, res) {
-  res.sendFile(path.join(__dirname, 'build', 'index.html'));
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
 });
 
+app.get('/', function (req, res) {
+  res.sendFile(path.join(__dirname, 'frontend/build', 'index.html'));
+});
 // enhance your app security with Helmet
 app.use(helmet());
 
